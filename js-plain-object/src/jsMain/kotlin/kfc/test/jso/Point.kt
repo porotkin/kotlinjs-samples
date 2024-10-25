@@ -2,8 +2,15 @@ package kfc.test.jso
 
 import kotlinx.js.JsPlainObject
 
-@JsPlainObject
-external interface Point {
+external class Point(
+    options: ConstructorOptions,
+) {
     val x: Double
     val y: Double
+
+    @JsPlainObject
+    interface ConstructorOptions {
+        val x: Double
+        val y: Double
+    }
 }
