@@ -6,5 +6,5 @@ Nested JsPlainObject interface leads to an error
 ./gradlew build
 ```
 
-2. Expected result: Test `PointTest` passes
-2. Alternative result: Test fails with `ReferenceError: Point is not defined`
+2. Expected result: Test passes
+2. Alternative result: Test fails with `ReferenceError: navigationHelpButton is not defined`
