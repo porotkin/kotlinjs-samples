@@ -1,5 +1,7 @@
 package kfc.test.jso
 
+import cesium.engine.CreateWorldTerrainAsyncOptions
+import cesium.engine.createWorldTerrain
 import cesium.widgets.Viewer
 import web.html.HTMLElement
 
@@ -24,4 +26,13 @@ fun CesiumViewer(
     )
 
     return Viewer(container, options)
+}
+
+suspend fun functionWithAdjacentJsPlainObject() {
+    createWorldTerrain(
+        CreateWorldTerrainAsyncOptions(
+            requestVertexNormals = false,
+            requestWaterMask = true,
+        )
+    )
 }
