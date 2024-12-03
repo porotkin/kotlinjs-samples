@@ -37,3 +37,4 @@ dependencyResolutionManagement {
 
 include("webpack-per-file-issue")
 include("js-plain-object")
+include("to-string-issue")
