@@ -1,5 +1,0 @@
-### Run
-
-```shell
-./gradlew jsViteDev
-```

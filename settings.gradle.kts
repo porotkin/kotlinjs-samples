@@ -40,4 +40,3 @@ dependencyResolutionManagement {
 
 include("webpack-per-file-issue")
 include("js-plain-object")
-include("tanstack-react-table")
