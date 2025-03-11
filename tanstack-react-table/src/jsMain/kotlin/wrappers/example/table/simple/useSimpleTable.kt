@@ -2,6 +2,7 @@ package wrappers.example.table.simple
 
 import js.array.ReadonlyArray
 import js.objects.jso
+import react.useMemo
 import tanstack.react.table.useReactTable
 import tanstack.table.core.ColumnDef
 import tanstack.table.core.TableMeta
@@ -22,5 +23,7 @@ internal fun <D : Any> useSimpleTable(
         }
     )
 
-    return TableInstance(table)
+    return useMemo(table) {
+        TableInstance(table)
+    }
 }
