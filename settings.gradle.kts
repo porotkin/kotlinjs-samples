@@ -14,6 +14,9 @@ dependencyResolutionManagement {
             plugin("kotlin-multiplatform", "org.jetbrains.kotlin.multiplatform").version(kotlinVersion)
             plugin("kotlin-jsPlainObjects", "org.jetbrains.kotlin.plugin.js-plain-objects").version(kotlinVersion)
 
+            val seskarVersion = extra["seskar.version"] as String
+            plugin("seskar", "io.github.turansky.seskar").version(seskarVersion)
+
             library("kotlin-testJs", "org.jetbrains.kotlin", "kotlin-test-js").version(kotlinVersion)
 
             val coroutinesVersion = extra["kotlinx-coroutines.version"] as String
