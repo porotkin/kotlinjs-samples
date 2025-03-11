@@ -10,13 +10,12 @@ internal class TableInstance<D : Any>(
     val headerGroups: ReadonlyArray<HeaderGroup<D>>,
     val rows: ReadonlyArray<Row<D>>,
     val meta: TableMeta,
-)
-
-internal fun <D : Any> TableInstance(
-    table: Table<D>,
-): TableInstance<D> =
-    TableInstance(
+) {
+    constructor(
+        table: Table<D>,
+    ) : this(
         headerGroups = table.getHeaderGroups(),
         rows = table.getRowModel().rows,
         meta = requireNotNull(table.options.meta),
     )
+}
