@@ -3,7 +3,7 @@ import web.dom.document
 fun main() {
     val view = createView()
 
-    document.appendChild(
+    document.body.appendChild(
         node = view.withStyling(),
     )
 }
