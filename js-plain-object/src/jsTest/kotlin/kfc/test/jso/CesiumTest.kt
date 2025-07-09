@@ -1,7 +1,7 @@
 package kfc.test.jso
 
 import web.dom.document
-import web.html.HTML.div
+import web.html.HtmlTagName.div
 import kotlin.test.Ignore
 import kotlin.test.Test
 import kotlin.test.assertNotNull

@@ -1,6 +1,6 @@
 import web.dom.document
-import web.html.HTML.div
 import web.html.HTMLDivElement
+import web.html.HtmlTagName.div
 
 typealias View = HTMLDivElement
 
