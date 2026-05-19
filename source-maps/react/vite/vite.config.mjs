@@ -1,6 +1,5 @@
 import {defineConfig, loadEnv} from 'vite'
 import {sentryVitePlugin} from "@sentry/vite-plugin";
-import sourcemaps from 'rollup-plugin-sourcemaps'
 
 export default defineConfig(({mode}) => {
     const env = loadEnv(mode, process.cwd(), '')
@@ -9,7 +8,7 @@ export default defineConfig(({mode}) => {
     return {
         root: "kotlin",
         plugins: [
-            sourcemaps(),
+            // sourcemaps(),
             sentryVitePlugin({
                 disable: !sentryToken,
                 authToken: sentryToken,
