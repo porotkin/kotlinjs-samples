@@ -39,7 +39,6 @@ dependencyResolutionManagement {
     }
 }
 
-include("js-plain-object")
 include("jvm-incremental-compilation")
 include("jvm-incremental-compilation:common")
 include("jvm-incremental-compilation:server")
