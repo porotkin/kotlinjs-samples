@@ -15,8 +15,10 @@ fun version(target: String): String {
 dependencyResolutionManagement {
     versionCatalogs {
         create("libs") {
-            library("kotlin", "org.jetbrains.kotlin", "kotlin-gradle-plugin").version(version("kotlin"))
-            plugin("serialization", "org.jetbrains.kotlin.plugin.serialization").version(version("kotlin"))
+            val kotlinVersion = version("kotlin")
+            library("kotlin", "org.jetbrains.kotlin", "kotlin-gradle-plugin").version(kotlinVersion)
+            plugin("serialization", "org.jetbrains.kotlin.plugin.serialization").version(kotlinVersion)
+            library("kotlin-jsPlainObjects", "org.jetbrains.kotlin:js-plain-objects:$kotlinVersion")
 
             library(
                 "serialization-json",
