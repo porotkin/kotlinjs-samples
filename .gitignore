@@ -6,6 +6,7 @@ build/
 .idea/*
 !.idea/icon.png
 *.iml
+.junie/
 
 webpack.config.d/
 karma.config.d/
