@@ -13,15 +13,6 @@ kotlin {
     js {
         configureJsTarget(moduleName = project.name)
     }
-
-    sourceSets {
-        jsMain {
-            dependencies {
-                implementation(devNpm("css-loader", "7.1.2"))
-                implementation(devNpm("style-loader", "4.0.0"))
-            }
-        }
-    }
 }
 
 fun KotlinJsTargetDsl.configureJsTarget(

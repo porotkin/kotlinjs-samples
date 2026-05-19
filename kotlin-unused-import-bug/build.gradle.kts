@@ -1,5 +1,5 @@
 plugins {
-    alias(kfc.plugins.library)
+    alias(libs.plugins.kfc.library)
 }
 
 dependencies {

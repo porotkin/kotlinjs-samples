@@ -1,6 +1,6 @@
 plugins {
-    `kotlin-tools-conventions`
-    `kotlin-conventions`
+    id("kotlin-tools-conventions")
+    id("kotlin-conventions")
 }
 
 dependencies {

@@ -1,9 +1,7 @@
 import io.github.turansky.kfc.gradle.plugin.BundlerEnvironmentExtension
 
 plugins {
-    alias(kfc.plugins.application)
-
-    `fix-source-maps`
+    alias(libs.plugins.kfc.application)
 }
 
 fun property(name: String): String =

@@ -1,9 +1,7 @@
 import org.jetbrains.kotlin.gradle.dsl.JsSourceMapEmbedMode
 
 plugins {
-    alias(kfc.plugins.application)
-
-    `fix-source-maps`
+    alias(libs.plugins.kfc.application)
 }
 
 dependencies {

@@ -1,0 +1,33 @@
+[versions]
+# https://github.com/jetbrains/kotlin/releases
+kotlin = "2.4.0-RC"
+# https://github.com/Kotlin/kotlinx.coroutines/releases
+kotlinx-coroutines = "1.11.0"
+# https://github.com/Kotlin/kotlinx.serialization/releases
+kotlinx-serialization = "1.11.0"
+# https://github.com/JetBrains/kotlin-wrappers/releases
+kotlin-wrappers = "2026.5.5"
+# https://github.com/turansky/kfc-plugins
+kfc-plugins = "19.3.0"
+# https://github.com/turansky/seskar
+seskar = "4.42.0"
+
+[libraries]
+kotlin-gradle = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin" }
+kotlin-testJs = { module = "org.jetbrains.kotlin:kotlin-test-js", version.ref = "kotlin" }
+kotlin-test = { module = "org.jetbrains.kotlin:kotlin-test", version.ref = "kotlin" }
+kotlin-test-junit = { module = "org.jetbrains.kotlin:kotlin-test-junit", version.ref = "kotlin" }
+coroutines-core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "kotlinx-coroutines" }
+coroutines-test = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-test", version.ref = "kotlinx-coroutines" }
+kotlin-jsPlainObjects = { module = "org.jetbrains.kotlin:js-plain-objects", version.ref = "kotlin" }
+
+# version catalogs
+catalogs-kotlinWrappers = { module = "org.jetbrains.kotlin-wrappers:kotlin-wrappers-catalog", version.ref = "kotlin-wrappers" }
+
+[plugins]
+kotlin-multiplatform = { id = "org.jetbrains.kotlin.multiplatform", version.ref = "kotlin" }
+kotlin-jsPlainObjects = { id = "org.jetbrains.kotlin.plugin.js-plain-objects", version.ref = "kotlin" }
+seskar = { id = "io.github.turansky.seskar", version.ref = "seskar" }
+kfc-application = { id = "io.github.turansky.kfc.application", version.ref = "kfc-plugins" }
+kfc-library = { id = "io.github.turansky.kfc.library", version.ref = "kfc-plugins" }
+kfc-worker = { id = "io.github.turansky.kfc.worker", version.ref = "kfc-plugins" }
