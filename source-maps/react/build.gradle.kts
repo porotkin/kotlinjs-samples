@@ -31,4 +31,5 @@ dependencies {
 
     jsMainImplementation(devNpm("@sentry/vite-plugin", "latest"))
     jsMainImplementation(devNpm("@sentry/react", "latest"))
+    jsMainImplementation(devNpm("rollup-plugin-sourcemaps", "latest"))
 }
