@@ -10,6 +10,5 @@ internal fun Notifications.withRemoved(
 ): Notifications =
     filter { it != item }.toTypedArray()
 
-@Suppress("unused")
 internal val castedValue
     get() = unsafeCast<ReadonlyArray<Any?>>(arrayOf<Any?>())
