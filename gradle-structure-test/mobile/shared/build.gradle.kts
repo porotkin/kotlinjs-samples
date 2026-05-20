@@ -1,0 +1,15 @@
+plugins {
+    alias(libs.plugins.kotlin.multiplatform)
+}
+
+kotlin {
+    jvm()
+
+    sourceSets {
+        val jvmMain by getting {
+            dependencies {
+                implementation(commonProjects.client)
+            }
+        }
+    }
+}
