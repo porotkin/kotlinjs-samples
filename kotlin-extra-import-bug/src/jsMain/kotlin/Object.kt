@@ -1,7 +1,5 @@
-package kfc.test.jso
-
-import kfc.test.jso.A.a
-import kfc.test.jso.A.b
+import A.a
+import A.b
 
 object A {
     /**
