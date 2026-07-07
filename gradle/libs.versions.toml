@@ -6,7 +6,7 @@ kotlinx-coroutines = "1.11.0"
 # https://github.com/Kotlin/kotlinx.serialization/releases
 kotlinx-serialization = "1.11.0"
 # https://github.com/JetBrains/kotlin-wrappers/releases
-kotlin-wrappers = "2026.5.5"
+kotlin-wrappers = "2026.7.1"
 # https://github.com/turansky/kfc-plugins
 kfc-plugins = "19.7.0"
 # https://github.com/turansky/seskar
