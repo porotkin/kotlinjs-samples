@@ -30,4 +30,3 @@ kotlin-jsPlainObjects = { id = "org.jetbrains.kotlin.plugin.js-plain-objects", v
 seskar = { id = "io.github.turansky.seskar", version.ref = "seskar" }
 kfc-application = { id = "io.github.turansky.kfc.application", version.ref = "kfc-plugins" }
 kfc-library = { id = "io.github.turansky.kfc.library", version.ref = "kfc-plugins" }
-kfc-worker = { id = "io.github.turansky.kfc.worker", version.ref = "kfc-plugins" }
