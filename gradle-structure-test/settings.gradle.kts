@@ -16,6 +16,5 @@ dependencyResolutionManagement {
 }
 
 includeBuild("common")
-includeBuild("mobile")
 includeBuild("web")
 includeBuild("server")
