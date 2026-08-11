@@ -9,9 +9,7 @@ pluginManagement {
     }
 }
 
-includeBuild("../common") {
-    name = "common-build"
-}
+includeBuild("../common")
 
 dependencyResolutionManagement {
     repositories {
