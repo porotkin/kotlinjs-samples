@@ -16,5 +16,3 @@ dependencyResolutionManagement {
 }
 
 includeBuild("common")
-includeBuild("web")
-includeBuild("server")

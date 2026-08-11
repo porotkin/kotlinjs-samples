@@ -9,7 +9,5 @@ tasks.wrapper {
 tasks.named("build") {
     dependsOn(
         gradle.includedBuild("common").task(":build"),
-        gradle.includedBuild("web").task(":build"),
-        gradle.includedBuild("server").task(":build"),
     )
 }

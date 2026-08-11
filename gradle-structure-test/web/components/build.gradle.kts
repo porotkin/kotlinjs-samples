@@ -11,7 +11,7 @@ kotlin {
     sourceSets {
         val jsMain by getting {
             dependencies {
-                implementation(projects.common)
+                implementation(projects.testCommon)
                 implementation(commonProjects.webapi)
             }
         }

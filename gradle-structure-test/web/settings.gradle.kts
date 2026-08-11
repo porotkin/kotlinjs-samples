@@ -26,5 +26,5 @@ dependencyResolutionManagement {
 }
 
 include("app")
-include("common")
+include("test-common")
 include("components")
