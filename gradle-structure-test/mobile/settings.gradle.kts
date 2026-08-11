@@ -4,6 +4,7 @@ enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
 
 pluginManagement {
     repositories {
+        google()
         mavenCentral()
         gradlePluginPortal()
     }
@@ -15,9 +16,7 @@ includeBuild("../common") {
 
 dependencyResolutionManagement {
     repositories {
-        maven {
-            url = uri("../build/local-maven")
-        }
+        google()
         mavenCentral()
     }
     versionCatalogs {
@@ -25,7 +24,7 @@ dependencyResolutionManagement {
             from(files("../gradle/libs.versions.toml"))
         }
         create("commonProjects") {
-            from("dev.gradle-structure-test.common.catalog:projects:1.0.0")
+            from(files("../common/gradle/projects.versions.toml"))
         }
     }
 }

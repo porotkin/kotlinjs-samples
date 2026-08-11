@@ -4,7 +4,6 @@ import structure.catalog.SubprojectCatalogService
 plugins {
     base
     `version-catalog`
-    `maven-publish`
 }
 
 val aliasHelper = AliasHelper(rootDir)
@@ -32,21 +31,8 @@ catalog {
     }
 }
 
-publishing {
-    publications {
-        create<MavenPublication>("subprojectCatalog") {
-            from(components["versionCatalog"])
-
-            groupId = "${project.group}.catalog"
-            artifactId = "projects"
-            version = project.version.toString()
-        }
-    }
-
-    repositories {
-        maven {
-            name = "subprojectCatalogLocal"
-            url = rootProject.layout.projectDirectory.dir("../build/local-maven").asFile.toURI()
-        }
-    }
+val exportSubprojectCatalog = tasks.register<Copy>("exportSubprojectCatalog") {
+    from(tasks.named("generateCatalogAsToml"))
+    into(layout.projectDirectory.dir("gradle"))
+    rename { "projects.versions.toml" }
 }

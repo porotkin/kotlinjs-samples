@@ -1,5 +1,5 @@
 plugins {
-    id("subproject-catalog-publishing") apply false
+    id("subproject-catalog-generation") apply false
 }
 
 group = "dev.gradle-structure-test.common"
@@ -10,12 +10,12 @@ subprojects {
     version = rootProject.version
 }
 
-apply(plugin = "subproject-catalog-publishing")
+apply(plugin = "subproject-catalog-generation")
 
 gradle.projectsEvaluated {
     tasks.named("build") {
         dependsOn(
-            tasks.named("publishSubprojectCatalogPublicationToSubprojectCatalogLocalRepository"),
+            tasks.named("exportSubprojectCatalog"),
             subprojects.map { it.tasks.named("build") },
         )
     }

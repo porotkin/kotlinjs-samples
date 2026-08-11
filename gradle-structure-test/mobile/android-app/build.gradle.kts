@@ -1,15 +1,22 @@
 plugins {
     alias(libs.plugins.kotlin.multiplatform)
+    alias(libs.plugins.android.application)
 }
 
 kotlin {
-    jvm()
+    androidTarget()
 
     sourceSets {
-        val jvmMain by getting {
-            dependencies {
-                implementation(projects.shared)
-            }
+        androidMain.dependencies {
+            implementation(projects.shared)
         }
+    }
+}
+
+android {
+    namespace = "structure.mobile.androidapp"
+    compileSdk = 36
+    defaultConfig {
+        minSdk = 24
     }
 }
