@@ -10,3 +10,4 @@ build/
 
 webpack.config.d/
 karma.config.d/
+local.properties
