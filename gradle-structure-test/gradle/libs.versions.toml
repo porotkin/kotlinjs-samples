@@ -3,6 +3,12 @@ kotlin = "2.4.10"
 project = "1.0.0"
 agp = "9.1.1"
 compose-multiplatform = "1.11.1"
+ktor = "3.5.2"
+slf4j = "2.0.18"
+
+[libraries]
+ktor-client-logging = { module = "io.ktor:ktor-client-logging", version.ref = "ktor" }
+slf4j-api = { module = "org.slf4j:slf4j-api", version.ref = "slf4j" }
 
 [plugins]
 kotlin-multiplatform = { id = "org.jetbrains.kotlin.multiplatform", version.ref = "kotlin" }

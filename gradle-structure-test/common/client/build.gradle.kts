@@ -1,5 +1,5 @@
 plugins {
-    alias(libs.plugins.kotlin.multiplatform)
+    id("org.jetbrains.kotlin.multiplatform")
 }
 
 kotlin {
@@ -15,4 +15,8 @@ kotlin {
             implementation(projects.core)
         }
     }
+}
+
+if (providers.systemProperty("build.mobile.enabled").orNull == "true") {
+    apply(plugin = "android-library-conventions")
 }

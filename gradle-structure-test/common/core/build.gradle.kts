@@ -1,5 +1,5 @@
 plugins {
-    alias(libs.plugins.kotlin.multiplatform)
+    id("org.jetbrains.kotlin.multiplatform")
 }
 
 kotlin {
@@ -31,6 +31,22 @@ kotlin {
 
         val jvmMain by getting {
             dependsOn(mobileCommon)
+            dependencies {
+                implementation(libs.slf4j.api)
+            }
+        }
+    }
+}
+
+if (providers.systemProperty("build.mobile.enabled").orNull == "true") {
+    apply(plugin = "android-library-conventions")
+    kotlin {
+        val mobileCommon = sourceSets.getByName("mobileCommon")
+        sourceSets.getByName("androidMain") {
+            dependsOn(mobileCommon)
+            dependencies {
+                implementation(libs.ktor.client.logging)
+            }
         }
     }
 }
