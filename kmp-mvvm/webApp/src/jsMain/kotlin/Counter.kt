@@ -1,20 +1,44 @@
-import com.example.kmp_mvvm.CounterViewModel
+import com.example.kmp_mvvm.model.CountObject
 import react.FC
+import react.Props
 import react.dom.html.ReactHTML.button
-import react.useEffectOnce
-import react.useMemo
-import react.useState
+import react.dom.html.ReactHTML.div
+import react.dom.html.ReactHTML.input
+import web.html.InputType
+import web.html.number
 
-val Counter = FC {
-    val viewModel = useMemo { CounterViewModel() }
-    var count by useState(viewModel.count.value)
+external interface CounterProps : Props {
+    var countObject: CountObject
+}
 
-    useEffectOnce {
-        viewModel.count.collect { count = it }
-    }
+val Counter = FC<CounterProps> { props ->
+    val viewModel = useCounterViewModel(props.countObject)
 
-    button {
-        onClick = { viewModel.increment() }
-        +"Count: $count"
+    div {
+        button {
+            onClick = viewModel.onDecrement
+
+            +"−"
+        }
+
+        input {
+            type = InputType.number
+            value = viewModel.countValue.toString()
+            onChange = viewModel.onSetCount
+        }
+
+        +" ${viewModel.countObject.symbol} "
+
+        button {
+            onClick = viewModel.onIncrement
+
+            +"+"
+        }
+
+        button {
+            onClick = viewModel.onResetCount
+
+            +"Reset"
+        }
     }
 }

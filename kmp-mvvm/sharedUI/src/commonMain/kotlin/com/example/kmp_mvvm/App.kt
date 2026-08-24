@@ -14,6 +14,8 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import com.example.kmp_mvvm.model.CountObject
+import com.example.kmp_mvvm.viewmodel.CounterViewModelImpl
 import kmp_mvvm.sharedui.generated.resources.Res
 import kmp_mvvm.sharedui.generated.resources.compose_multiplatform
 import org.jetbrains.compose.resources.painterResource
@@ -30,7 +32,9 @@ fun App() {
                 .fillMaxSize(),
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
-            Counter()
+            CountObject.entries.forEach { countObject ->
+                Counter(remember { CounterViewModelImpl(countObject) })
+            }
             Button(onClick = { showContent = !showContent }) {
                 Text("Click me!")
             }
