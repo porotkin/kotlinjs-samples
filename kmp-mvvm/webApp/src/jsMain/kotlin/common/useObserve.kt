@@ -1,5 +1,6 @@
 import com.example.kmp_mvvm.viewmodel.ObservableProperty
-import kotlinx.coroutines.MainScope
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.launchIn
@@ -13,7 +14,7 @@ fun <T> useObserve(state: ObservableProperty<T>): T {
     val stateFlow = state as StateFlow<T>
 
     val subscribe = useCallback(stateFlow) { onStoreChange: () -> Unit ->
-        val scope = MainScope()
+        val scope = CoroutineScope(Dispatchers.Unconfined)
 
         stateFlow
             .onEach { onStoreChange() }
