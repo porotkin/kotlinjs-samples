@@ -17,6 +17,7 @@ val Counter = FC<CounterProps> { props ->
     div {
         button {
             onClick = viewModel.onDecrement
+            disabled = !viewModel.canDecrementValue
 
             +"−"
         }
@@ -39,6 +40,12 @@ val Counter = FC<CounterProps> { props ->
             onClick = viewModel.onResetCount
 
             +"Reset"
+        }
+
+        viewModel.countErrorValue?.let { message ->
+            div {
+                +message
+            }
         }
     }
 }

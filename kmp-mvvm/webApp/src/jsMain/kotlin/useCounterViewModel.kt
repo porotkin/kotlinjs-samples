@@ -9,6 +9,8 @@ import web.html.HTMLInputElement
 
 interface ReactCounterViewModel : CounterViewModel {
     val countValue: Int
+    val countErrorValue: String?
+    val canDecrementValue: Boolean
     val onIncrement: MouseEventHandler<HTMLButtonElement>
     val onDecrement: MouseEventHandler<HTMLButtonElement>
     val onSetCount: ChangeEventHandler<HTMLInputElement, HTMLInputElement>
@@ -18,6 +20,8 @@ interface ReactCounterViewModel : CounterViewModel {
 fun useCounterViewModel(countObject: CountObject): ReactCounterViewModel {
     val viewModel = useViewModel<CounterViewModel> { CounterViewModelImpl(countObject) }
     val count = useObserve(viewModel.count)
+    val countError = useObserve(viewModel.countError)
+    val canDecrement = useObserve(viewModel.canDecrement)
 
     val increment: MouseEventHandler<HTMLButtonElement> = useCallback(viewModel) {
         viewModel.increment()
@@ -35,6 +39,8 @@ fun useCounterViewModel(countObject: CountObject): ReactCounterViewModel {
 
     return object : ReactCounterViewModel, CounterViewModel by viewModel {
         override val countValue = count
+        override val countErrorValue = countError
+        override val canDecrementValue = canDecrement
         override val onIncrement = increment
         override val onDecrement = decrement
         override val onSetCount = setCount

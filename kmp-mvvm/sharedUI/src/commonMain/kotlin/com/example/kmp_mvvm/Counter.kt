@@ -17,12 +17,16 @@ import com.example.kmp_mvvm.viewmodel.CounterViewModelImpl
 @Composable
 fun Counter(viewModel: CounterViewModel = remember { CounterViewModelImpl() }) {
     val count by viewModel.count.collectAsWiredState()
+    val countError by viewModel.countError.collectAsWiredState()
+    val canDecrement by viewModel.canDecrement.collectAsWiredState()
 
     Row(verticalAlignment = Alignment.CenterVertically) {
-        Button(onClick = viewModel::decrement) { Text("−") }
+        Button(onClick = viewModel::decrement, enabled = canDecrement) { Text("−") }
         TextField(
             value = count.toString(),
             onValueChange = { text -> text.toIntOrNull()?.let(viewModel::setCount) },
+            isError = countError != null,
+            supportingText = countError?.let { message -> { Text(message) } },
             modifier = Modifier.width(96.dp),
         )
         Text(viewModel.countObject.symbol)
