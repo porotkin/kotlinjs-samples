@@ -6,6 +6,10 @@ plugins {
 }
 
 kotlin {
+    compilerOptions {
+        freeCompilerArgs.add("-Xexplicit-backing-fields")
+    }
+
     iosArm64()
     iosSimulatorArm64()
 
@@ -31,7 +35,7 @@ kotlin {
 
     sourceSets {
         commonMain.dependencies {
-            // put your Multiplatform dependencies here
+            api(libs.kotlinx.coroutinesCore)
         }
         commonTest.dependencies {
             implementation(libs.kotlin.test)

@@ -11,6 +11,7 @@ kotlin {
 
     sourceSets {
         jsMain.dependencies {
+            implementation(projects.common)
             implementation(project.dependencies.platform(libs.wrappers.bom))
             implementation(libs.wrappers.react)
             implementation(libs.wrappers.reactDom)
