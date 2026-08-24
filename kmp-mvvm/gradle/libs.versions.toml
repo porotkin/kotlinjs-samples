@@ -38,6 +38,7 @@ wrappers-bom = { module = "org.jetbrains.kotlin-wrappers:kotlin-wrappers-bom", v
 wrappers-browser = { module = "org.jetbrains.kotlin-wrappers:kotlin-browser" }
 wrappers-react = { module = "org.jetbrains.kotlin-wrappers:kotlin-react" }
 wrappers-reactDom = { module = "org.jetbrains.kotlin-wrappers:kotlin-react-dom" }
+wrappers-reactUse = { module = "org.jetbrains.kotlin-wrappers:kotlin-react-use" }
 
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "agp" }

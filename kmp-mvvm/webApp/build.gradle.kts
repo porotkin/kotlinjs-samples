@@ -15,6 +15,7 @@ kotlin {
             implementation(project.dependencies.platform(libs.wrappers.bom))
             implementation(libs.wrappers.react)
             implementation(libs.wrappers.reactDom)
+            implementation(libs.wrappers.reactUse)
         }
     }
 }
