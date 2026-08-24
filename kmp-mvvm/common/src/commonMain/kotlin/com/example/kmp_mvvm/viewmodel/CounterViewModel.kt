@@ -5,6 +5,7 @@ import com.example.kmp_mvvm.usecases.DecrementCount
 import com.example.kmp_mvvm.usecases.IncrementCount
 import com.example.kmp_mvvm.usecases.ResetCount
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.update
 
 interface CounterViewModel {
     val countObject: CountObject
@@ -27,33 +28,23 @@ class CounterViewModelImpl(
     private val restoreInitialCount: ResetCount = ResetCount(initialCount),
 ) : CounterViewModel {
     override val count = MutableStateFlow(initialCount)
-    override val countError = MutableStateFlow(countObject.validate(initialCount))
-    override val canDecrement = MutableStateFlow(canDecrementFrom(initialCount))
+    override val countError = count.derived { countObject.validate(it) }
+    override val canDecrement = count.derived { countObject.validate(decrementCount(it)) == null }
 
     override fun increment() {
-        mutate { incrementCount(it) }
+        count.update { incrementCount(it) }
     }
 
     override fun decrement() {
         if (!canDecrement.value) return
-        mutate { decrementCount(it) }
+        count.update { decrementCount(it) }
     }
 
     override fun setCount(count: Int) {
-        mutate { count }
+        this.count.value = count
     }
 
     override fun resetCount() {
-        mutate { restoreInitialCount() }
+        count.value = restoreInitialCount()
     }
-
-    private fun mutate(transform: (Int) -> Int) {
-        val newCount = transform(count.value)
-        count.value = newCount
-        countError.value = countObject.validate(newCount)
-        canDecrement.value = canDecrementFrom(newCount)
-    }
-
-    private fun canDecrementFrom(count: Int): Boolean =
-        countObject.validate(decrementCount(count)) == null
 }
