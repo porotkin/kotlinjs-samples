@@ -33,7 +33,11 @@ fun App() {
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
             CountObject.entries.forEach { countObject ->
-                Counter(remember { CounterViewModelImpl(countObject) })
+                Counter(
+                    rememberViewModel {
+                        CounterViewModelImpl(CounterViewModelImpl.Params(countObject))
+                    },
+                )
             }
             Button(onClick = { showContent = !showContent }) {
                 Text("Click me!")

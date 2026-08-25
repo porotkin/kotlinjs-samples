@@ -37,12 +37,26 @@ val Counter = FC<CounterProps> { props ->
         }
 
         button {
-            onClick = viewModel.onResetCount
+            onClick = viewModel.onReset
+            disabled = !viewModel.isDirtyValue
 
             +"Reset"
         }
 
+        button {
+            onClick = viewModel.onSave
+            disabled = !viewModel.canSaveValue
+
+            +(if (viewModel.isSavingValue) "Saving…" else "Save")
+        }
+
         viewModel.countErrorValue?.let { message ->
+            div {
+                +message
+            }
+        }
+
+        viewModel.saveErrorValue?.let { message ->
             div {
                 +message
             }
