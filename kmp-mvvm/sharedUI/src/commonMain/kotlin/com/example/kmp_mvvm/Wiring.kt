@@ -6,7 +6,7 @@ import androidx.compose.runtime.State
 import androidx.compose.runtime.remember
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.kmp_mvvm.viewmodel.HasViewModelScope
-import com.example.kmp_mvvm.viewmodel.ObservableProperty
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.StateFlow
 
 @Composable
@@ -20,5 +20,5 @@ fun <VM : HasViewModelScope> rememberViewModel(create: () -> VM): VM {
 
 @Suppress("UNCHECKED_CAST")
 @Composable
-fun <T> ObservableProperty<T>.collectAsWiredState(): State<T> =
+fun <T> Flow<T>.collectAsWiredState(): State<T> =
     (this as StateFlow<T>).collectAsStateWithLifecycle()
