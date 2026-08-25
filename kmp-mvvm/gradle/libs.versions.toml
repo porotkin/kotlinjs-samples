@@ -39,6 +39,9 @@ wrappers-browser = { module = "org.jetbrains.kotlin-wrappers:kotlin-browser" }
 wrappers-react = { module = "org.jetbrains.kotlin-wrappers:kotlin-react" }
 wrappers-reactDom = { module = "org.jetbrains.kotlin-wrappers:kotlin-react-dom" }
 wrappers-reactUse = { module = "org.jetbrains.kotlin-wrappers:kotlin-react-use" }
+wrappers-emotionReact = { module = "org.jetbrains.kotlin-wrappers:kotlin-emotion-react" }
+wrappers-emotionStyled = { module = "org.jetbrains.kotlin-wrappers:kotlin-emotion-styled" }
+wrappers-muiMaterial = { module = "org.jetbrains.kotlin-wrappers:kotlin-mui-material" }
 
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "agp" }

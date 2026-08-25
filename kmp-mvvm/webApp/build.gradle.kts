@@ -16,6 +16,9 @@ kotlin {
             implementation(libs.wrappers.react)
             implementation(libs.wrappers.reactDom)
             implementation(libs.wrappers.reactUse)
+            implementation(libs.wrappers.muiMaterial)
+            implementation(libs.wrappers.emotionReact)
+            implementation(libs.wrappers.emotionStyled)
         }
     }
 }
