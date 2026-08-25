@@ -35,7 +35,6 @@ compose-ui = { module = "org.jetbrains.compose.ui:ui", version.ref = "composeMul
 compose-components-resources = { module = "org.jetbrains.compose.components:components-resources", version.ref = "composeMultiplatform" }
 compose-uiToolingPreview = { module = "org.jetbrains.compose.ui:ui-tooling-preview", version.ref = "composeMultiplatform" }
 wrappers-bom = { module = "org.jetbrains.kotlin-wrappers:kotlin-wrappers-bom", version.ref = "kotlin-wrappers" }
-wrappers-browser = { module = "org.jetbrains.kotlin-wrappers:kotlin-browser" }
 wrappers-react = { module = "org.jetbrains.kotlin-wrappers:kotlin-react" }
 wrappers-reactDom = { module = "org.jetbrains.kotlin-wrappers:kotlin-react-dom" }
 wrappers-reactUse = { module = "org.jetbrains.kotlin-wrappers:kotlin-react-use" }

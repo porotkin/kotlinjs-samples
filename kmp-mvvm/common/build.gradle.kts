@@ -40,9 +40,5 @@ kotlin {
         commonTest.dependencies {
             implementation(libs.kotlin.test)
         }
-        jsMain.dependencies {
-            implementation(project.dependencies.platform(libs.wrappers.bom))
-            implementation(libs.wrappers.browser)
-        }
     }
 }
