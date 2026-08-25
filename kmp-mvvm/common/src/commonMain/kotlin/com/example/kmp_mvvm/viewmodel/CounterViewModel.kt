@@ -5,6 +5,8 @@ import com.example.kmp_mvvm.service.FakeCounterService
 import com.example.kmp_mvvm.usecases.DecrementCount
 import com.example.kmp_mvvm.usecases.IncrementCount
 import com.example.kmp_mvvm.usecases.SaveCount
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.update
 
 interface CounterViewModel {
     val countObject: CountObject
@@ -42,16 +44,18 @@ class CounterViewModelImpl(
 
     override val countObject = params.countObject
 
-    private val saved = signal(params.initialCount)
+    private val saved = MutableStateFlow(params.initialCount)
 
-    override val count = signal(params.initialCount)
-    override val countError = computed { countObject.validate(count.value) }
-    override val canDecrement = computed { countObject.validate(decrementCount(count.value)) == null }
+    override val count = MutableStateFlow(params.initialCount)
+    override val countError = count.derived { countObject.validate(it) }
+    override val canDecrement = count.derived { countObject.validate(decrementCount(it)) == null }
 
-    override val isDirty = computed { count.value != saved.value }
-    override val isSaving = signal(false)
-    override val saveError = signal<String?>(null)
-    override val canSave = computed { isDirty.value && countError.value == null && !isSaving.value }
+    override val isDirty = derived(count, saved) { current, baseline -> current != baseline }
+    override val isSaving = MutableStateFlow(false)
+    override val saveError = MutableStateFlow<String?>(null)
+    override val canSave = derived(isDirty, countError, isSaving) { dirty, error, saving ->
+        dirty && error == null && !saving
+    }
 
     override fun increment() {
         count.update { incrementCount(it) }
