@@ -1,9 +1,10 @@
 import com.example.kmp_mvvm.model.CountObject
+import mui.material.*
+import mui.system.responsive
 import react.FC
+import react.Fragment
 import react.Props
-import react.dom.html.ReactHTML.button
-import react.dom.html.ReactHTML.div
-import react.dom.html.ReactHTML.input
+import react.create
 import web.html.InputType
 import web.html.number
 
@@ -12,54 +13,65 @@ external interface CounterProps : Props {
 }
 
 val Counter = FC<CounterProps> { props ->
-    val viewModel = useCounterViewModel(props.countObject)
+    val counter = useCounterViewModel(props.countObject)
 
-    div {
-        button {
-            onClick = viewModel.onDecrement
-            disabled = !viewModel.canDecrementValue
+    Grid {
+        container = true
+        spacing = responsive(2)
+
+        Button {
+            variant = ButtonVariant.outlined
+            onClick = counter.onDecrement
+            disabled = !counter.canDecrement
 
             +"−"
         }
 
-        input {
+        OutlinedTextField {
             type = InputType.number
-            value = viewModel.countValue.toString()
-            onChange = viewModel.onSetCount
+            value = counter.count.toString()
+            error = counter.countError != null
+            helperText = counter.countError?.let {
+                Fragment.create {
+                    +it
+                }
+            }
+            onChange = counter.onSetCount
         }
 
-        +" ${viewModel.countObject.symbol} "
+        +" ${counter.symbol} "
 
-        button {
-            onClick = viewModel.onIncrement
+        Button {
+            variant = ButtonVariant.outlined
+            onClick = counter.onIncrement
 
             +"+"
         }
 
-        button {
-            onClick = viewModel.onReset
-            disabled = !viewModel.isDirtyValue
+        Button {
+            onClick = counter.onReset
+            disabled = !counter.isDirty
 
             +"Reset"
         }
 
-        button {
-            onClick = viewModel.onSave
-            disabled = !viewModel.canSaveValue
+        Button {
+            variant = ButtonVariant.contained
+            onClick = counter.onSave
+            disabled = !counter.canSave
+            loading = counter.isSaving
 
-            +(if (viewModel.isSavingValue) "Saving…" else "Save")
+            +"Save"
         }
 
-        viewModel.countErrorValue?.let { message ->
-            div {
-                +message
-            }
-        }
+        counter.saveError?.let { message ->
+            FormHelperText {
+                error = true
 
-        viewModel.saveErrorValue?.let { message ->
-            div {
                 +message
             }
         }
     }
 }
+
+private val OutlinedTextField = TextField.unsafeCast<FC<OutlinedTextFieldProps>>()

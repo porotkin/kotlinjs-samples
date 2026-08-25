@@ -3,27 +3,28 @@ import com.example.kmp_mvvm.viewmodel.CounterViewModel
 import com.example.kmp_mvvm.viewmodel.CounterViewModelImpl
 import react.dom.events.ChangeEventHandler
 import react.dom.events.MouseEventHandler
-import react.useCallback
+import react.use.useConstant
 import web.html.HTMLButtonElement
+import web.html.HTMLElement
 import web.html.HTMLInputElement
 
-interface ReactCounterViewModel : CounterViewModel {
-    val countValue: Int
-    val countErrorValue: String?
-    val canDecrementValue: Boolean
-    val isDirtyValue: Boolean
-    val isSavingValue: Boolean
-    val canSaveValue: Boolean
-    val saveErrorValue: String?
+class CounterState(
+    val symbol: String,
+    val count: Int,
+    val countError: String?,
+    val canDecrement: Boolean,
+    val isDirty: Boolean,
+    val isSaving: Boolean,
+    val canSave: Boolean,
+    val saveError: String?,
+    val onIncrement: MouseEventHandler<HTMLButtonElement>,
+    val onDecrement: MouseEventHandler<HTMLButtonElement>,
+    val onSetCount: ChangeEventHandler<HTMLElement, *>,
+    val onReset: MouseEventHandler<HTMLButtonElement>,
+    val onSave: MouseEventHandler<HTMLButtonElement>,
+)
 
-    val onIncrement: MouseEventHandler<HTMLButtonElement>
-    val onDecrement: MouseEventHandler<HTMLButtonElement>
-    val onSetCount: ChangeEventHandler<HTMLInputElement, HTMLInputElement>
-    val onReset: MouseEventHandler<HTMLButtonElement>
-    val onSave: MouseEventHandler<HTMLButtonElement>
-}
-
-fun useCounterViewModel(countObject: CountObject): ReactCounterViewModel {
+fun useCounterViewModel(countObject: CountObject): CounterState {
     val viewModel: CounterViewModel = useViewModel {
         CounterViewModelImpl(
             CounterViewModelImpl.Params(
@@ -33,43 +34,40 @@ fun useCounterViewModel(countObject: CountObject): ReactCounterViewModel {
         )
     }
 
+    val handlers = useConstant {
+        object {
+            val increment: MouseEventHandler<HTMLButtonElement> = { viewModel.increment() }
+            val decrement: MouseEventHandler<HTMLButtonElement> = { viewModel.decrement() }
+            val reset: MouseEventHandler<HTMLButtonElement> = { viewModel.resetCount() }
+            val save: MouseEventHandler<HTMLButtonElement> = { viewModel.save() }
+            val setCount: ChangeEventHandler<HTMLElement, *> = { event ->
+                val value = (event.target as HTMLInputElement).valueAsNumber
+                if (!value.isNaN()) viewModel.setCount(value.toInt())
+            }
+        }
+    }
+
     val count = useObserve(viewModel.count)
     val countError = useObserve(viewModel.countError)
     val canDecrement = useObserve(viewModel.canDecrement)
     val isDirty = useObserve(viewModel.isDirty)
     val isSaving = useObserve(viewModel.isSaving)
     val canSave = useObserve(viewModel.canSave)
-    val saveErrorState = useObserve(viewModel.saveError)
+    val saveError = useObserve(viewModel.saveError)
 
-    val increment: MouseEventHandler<HTMLButtonElement> = useCallback(viewModel) {
-        viewModel.increment()
-    }
-    val decrement: MouseEventHandler<HTMLButtonElement> = useCallback(viewModel) {
-        viewModel.decrement()
-    }
-    val setCount: ChangeEventHandler<HTMLInputElement, HTMLInputElement> = useCallback(viewModel) { event ->
-        val value = event.target.valueAsNumber
-        if (!value.isNaN()) viewModel.setCount(value.toInt())
-    }
-    val reset: MouseEventHandler<HTMLButtonElement> = useCallback(viewModel) {
-        viewModel.resetCount()
-    }
-    val save: MouseEventHandler<HTMLButtonElement> = useCallback(viewModel) {
-        viewModel.save()
-    }
-
-    return object : ReactCounterViewModel, CounterViewModel by viewModel {
-        override val countValue = count
-        override val countErrorValue = countError
-        override val canDecrementValue = canDecrement
-        override val isDirtyValue = isDirty
-        override val isSavingValue = isSaving
-        override val canSaveValue = canSave
-        override val saveErrorValue = saveErrorState
-        override val onIncrement = increment
-        override val onDecrement = decrement
-        override val onSetCount = setCount
-        override val onReset = reset
-        override val onSave = save
-    }
+    return CounterState(
+        symbol = viewModel.countObject.symbol,
+        count = count,
+        countError = countError,
+        canDecrement = canDecrement,
+        isDirty = isDirty,
+        isSaving = isSaving,
+        canSave = canSave,
+        saveError = saveError,
+        onIncrement = handlers.increment,
+        onDecrement = handlers.decrement,
+        onSetCount = handlers.setCount,
+        onReset = handlers.reset,
+        onSave = handlers.save,
+    )
 }
