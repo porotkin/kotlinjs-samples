@@ -5,6 +5,7 @@ import react.dom.events.ChangeEventHandler
 import react.dom.events.MouseEventHandler
 import react.use.useConstant
 import react.use.useLatest
+import react.useEffect
 import web.html.HTMLButtonElement
 import web.html.HTMLElement
 import web.html.HTMLInputElement
@@ -42,7 +43,9 @@ fun useCounterViewModel(
         )
     }
 
-    useExternalValue(serverCount) { it?.let(viewModel::updateSavedCount) }
+    useEffect(serverCount) {
+        serverCount?.let(viewModel::updateSavedCount)
+    }
 
     val handlers = useConstant {
         object {
