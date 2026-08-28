@@ -78,6 +78,23 @@ class CounterViewModelTest {
     }
 
     @Test
+    fun serverUpdateFollowsWhenCleanKeepsDraftWhenDirty() {
+        val viewModel = testViewModel(initialCount = 10)
+
+        viewModel.updateSavedCount(20)
+        assertEquals(20, viewModel.count.value)
+        assertFalse(viewModel.isDirty.value)
+
+        viewModel.setCount(42)
+        viewModel.updateSavedCount(30)
+        assertEquals(42, viewModel.count.value)
+        assertTrue(viewModel.isDirty.value)
+
+        viewModel.resetCount()
+        assertEquals(30, viewModel.count.value)
+    }
+
+    @Test
     fun failedSaveKeepsDraftAndReportsError() {
         val viewModel = testViewModel(
             initialCount = 10,

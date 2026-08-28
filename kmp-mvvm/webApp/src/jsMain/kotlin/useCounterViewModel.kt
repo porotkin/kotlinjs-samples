@@ -4,6 +4,7 @@ import com.example.kmp_mvvm.viewmodel.CounterViewModelImpl
 import react.dom.events.ChangeEventHandler
 import react.dom.events.MouseEventHandler
 import react.use.useConstant
+import react.use.useLatest
 import web.html.HTMLButtonElement
 import web.html.HTMLElement
 import web.html.HTMLInputElement
@@ -24,15 +25,24 @@ class CounterState(
     val onSave: MouseEventHandler<HTMLButtonElement>,
 )
 
-fun useCounterViewModel(countObject: CountObject): CounterState {
+fun useCounterViewModel(
+    countObject: CountObject,
+    serverCount: Int? = null,
+    onSaved: (Int) -> Unit = {},
+): CounterState {
+    val latestOnSaved by useLatest(onSaved)
+
     val viewModel: CounterViewModel = useViewModel {
         CounterViewModelImpl(
             CounterViewModelImpl.Params(
                 countObject = countObject,
-                onSaved = { saved -> println("saved $saved ${countObject.symbol} — invalidate query") },
+                initialCount = serverCount ?: 0,
+                onSaved = { saved -> latestOnSaved(saved) },
             ),
         )
     }
+
+    useExternalValue(serverCount) { it?.let(viewModel::updateSavedCount) }
 
     val handlers = useConstant {
         object {
@@ -47,13 +57,13 @@ fun useCounterViewModel(countObject: CountObject): CounterState {
         }
     }
 
-    val count = useObserve(viewModel.count)
-    val countError = useObserve(viewModel.countError)
-    val canDecrement = useObserve(viewModel.canDecrement)
-    val isDirty = useObserve(viewModel.isDirty)
-    val isSaving = useObserve(viewModel.isSaving)
-    val canSave = useObserve(viewModel.canSave)
-    val saveError = useObserve(viewModel.saveError)
+    val count = useObservable(viewModel.count)
+    val countError = useObservable(viewModel.countError)
+    val canDecrement = useObservable(viewModel.canDecrement)
+    val isDirty = useObservable(viewModel.isDirty)
+    val isSaving = useObservable(viewModel.isSaving)
+    val canSave = useObservable(viewModel.canSave)
+    val saveError = useObservable(viewModel.saveError)
 
     return CounterState(
         symbol = viewModel.countObject.symbol,

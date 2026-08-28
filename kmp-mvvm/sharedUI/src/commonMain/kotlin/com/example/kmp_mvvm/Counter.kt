@@ -12,17 +12,18 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.kmp_mvvm.viewmodel.CounterViewModel
 
 @Composable
 fun Counter(viewModel: CounterViewModel) {
-    val count by viewModel.count.collectAsWiredState()
-    val countError by viewModel.countError.collectAsWiredState()
-    val canDecrement by viewModel.canDecrement.collectAsWiredState()
-    val isDirty by viewModel.isDirty.collectAsWiredState()
-    val isSaving by viewModel.isSaving.collectAsWiredState()
-    val canSave by viewModel.canSave.collectAsWiredState()
-    val saveError by viewModel.saveError.collectAsWiredState()
+    val count by viewModel.count.collectAsStateWithLifecycle()
+    val countError by viewModel.countError.collectAsStateWithLifecycle()
+    val canDecrement by viewModel.canDecrement.collectAsStateWithLifecycle()
+    val isDirty by viewModel.isDirty.collectAsStateWithLifecycle()
+    val isSaving by viewModel.isSaving.collectAsStateWithLifecycle()
+    val canSave by viewModel.canSave.collectAsStateWithLifecycle()
+    val saveError by viewModel.saveError.collectAsStateWithLifecycle()
 
     Column {
         Row(verticalAlignment = Alignment.CenterVertically) {

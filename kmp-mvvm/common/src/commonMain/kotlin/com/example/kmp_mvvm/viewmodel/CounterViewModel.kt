@@ -5,25 +5,26 @@ import com.example.kmp_mvvm.service.FakeCounterService
 import com.example.kmp_mvvm.usecases.DecrementCount
 import com.example.kmp_mvvm.usecases.IncrementCount
 import com.example.kmp_mvvm.usecases.SaveCount
-import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.update
 
 interface CounterViewModel {
     val countObject: CountObject
 
-    val count: Flow<Int>
-    val countError: Flow<String?>
-    val canDecrement: Flow<Boolean>
+    val count: StateFlow<Int>
+    val countError: StateFlow<String?>
+    val canDecrement: StateFlow<Boolean>
 
-    val isDirty: Flow<Boolean>
-    val isSaving: Flow<Boolean>
-    val canSave: Flow<Boolean>
-    val saveError: Flow<String?>
+    val isDirty: StateFlow<Boolean>
+    val isSaving: StateFlow<Boolean>
+    val canSave: StateFlow<Boolean>
+    val saveError: StateFlow<String?>
 
     fun increment()
     fun decrement()
     fun setCount(count: Int)
+    fun updateSavedCount(count: Int)
 
     fun resetCount()
     fun save()
@@ -69,6 +70,12 @@ class CounterViewModelImpl(
 
     override fun setCount(count: Int) {
         this.count.value = count
+    }
+
+    override fun updateSavedCount(count: Int) {
+        val draftClean = this.count.value == saved.value
+        saved.value = count
+        if (draftClean) this.count.value = count
     }
 
     override fun resetCount() {
