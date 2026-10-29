@@ -8,9 +8,12 @@
 ```
 
 ```
-withApply: 480 ms, withoutScopeFunction: 47 ms
-withApply: 1112 ms, withoutScopeFunction: 42 ms
-withApply: 486 ms, withoutScopeFunction: 85 ms
+withoutScopeFunction: 20 ms
+withoutScopeFunction: 18 ms
+withoutScopeFunction: 18 ms
+withApply: 363 ms
+withApply: 440 ms
+withApply: 287 ms
 ```
 
 `withApply` should be as fast as `withoutScopeFunction`.

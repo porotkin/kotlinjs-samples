@@ -7,9 +7,12 @@ fun consume(options: Options): Unit =
 
 fun main() {
     repeat(3) {
-        val apply = measureTime { repeat(1_000_000) { consume(withApply()) } }
-        val plain = measureTime { repeat(1_000_000) { consume(withoutScopeFunction()) } }
-        println("withApply: ${apply.inWholeMilliseconds} ms, withoutScopeFunction: ${plain.inWholeMilliseconds} ms")
+        val time = measureTime { repeat(1_000_000) { consume(withoutScopeFunction()) } }
+        println("withoutScopeFunction: ${time.inWholeMilliseconds} ms")
+    }
+    repeat(3) {
+        val time = measureTime { repeat(1_000_000) { consume(withApply()) } }
+        println("withApply: ${time.inWholeMilliseconds} ms")
     }
 
     withAlso()
