@@ -12,10 +12,4 @@ kotlin {
             freeCompilerArgs.add("-Xwasm-generate-wat")
         }
     }
-
-    sourceSets {
-        wasmJsMain.dependencies {
-            implementation(kotlinWrappers.js)
-        }
-    }
 }

@@ -1,22 +1,37 @@
-import js.objects.unsafeJso
+@file:OptIn(ExperimentalWasmJsInterop::class)
 
-@OptIn(ExperimentalWasmJsInterop::class)
 external interface Options : JsAny {
     var value: Int
 }
 
-// `unsafeJso<T>().apply(block)`: boxed via `jsToKotlinAnyAdapter`, unboxed twice via `kotlinToJsAnyAdapter`
-fun optionsWithApply(): Options =
-    unsafeJso { value = 1 }
+fun createOptions(): Options =
+    js("({})")
 
-// Same without `apply`: stays `externref`
-fun optionsWithoutApply(): Options {
-    val options = unsafeJso<Options>()
-    options.value = 2
+fun withApply(): Options =
+    createOptions().apply { value = 1 }
+
+fun withAlso(): Options =
+    createOptions().also { it.value = 1 }
+
+fun withTakeIf(): Options? =
+    createOptions().takeIf { it.value == 0 }
+
+@Suppress("SimpleRedundantLet")
+fun withLet(): Int =
+    createOptions().let { it.value }
+
+fun withRun(): Int =
+    createOptions().run { value }
+
+fun withWith(): Int =
+    with(createOptions()) { value }
+
+fun withoutScopeFunction(): Options {
+    val options = createOptions()
+    options.value = 1
     return options
 }
 
-fun main() {
-    println(optionsWithApply().value)
-    println(optionsWithoutApply().value)
+fun discarded() {
+    createOptions()
 }
