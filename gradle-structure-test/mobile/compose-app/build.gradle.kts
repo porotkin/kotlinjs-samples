@@ -21,7 +21,7 @@ kotlin {
 
 android {
     namespace = "structure.mobile.composeapp"
-    compileSdk = 36
+    compileSdk = 37
     defaultConfig {
         minSdk = 24
     }
