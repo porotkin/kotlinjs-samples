@@ -1,4 +1,4 @@
-rootProject.name = "gradle-structure-test"
+rootProject.name = "composite-builds"
 
 enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
 
