@@ -4,3 +4,4 @@
 build/
 kotlin-js-store/
 local.properties
+benchmarks/out/
