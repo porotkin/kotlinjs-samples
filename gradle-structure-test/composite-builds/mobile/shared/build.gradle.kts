@@ -9,6 +9,12 @@ kotlin {
     iosSimulatorArm64()
 
     sourceSets {
+        val iosMain by creating {
+            dependsOn(commonMain.get())
+        }
+        iosArm64Main { dependsOn(iosMain) }
+        iosSimulatorArm64Main { dependsOn(iosMain) }
+
         androidMain.dependencies {
             implementation(commonProjects.client)
         }
