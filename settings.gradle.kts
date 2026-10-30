@@ -34,6 +34,7 @@ dependencyResolutionManagement {
 includeBuild("build-logic")
 includeBuild("gradle-structure-test/composite-builds/common")
 includeBuild("gradle-structure-test/composite-builds")
+includeBuild("gradle-structure-test/isolated-projects")
 includeBuild("kmp-mvvm")
 
 include("jvm-incremental-compilation")
