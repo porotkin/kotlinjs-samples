@@ -1,0 +1,67 @@
+default-scenarios = ["configuration", "configuration-cache-hit", "leaf-task", "up-to-date-build", "non-abi-change", "abi-change", "clean-build", "ide-sync"]
+
+configuration {
+    title = "Configuration without configuration cache (help)"
+    tasks = ["help"]
+    gradle-args = ["--no-configuration-cache"]
+}
+
+configuration-cache-hit {
+    title = "Configuration cache hit (help)"
+    tasks = ["help"]
+}
+
+leaf-task {
+    title = "Single leaf task without configuration cache (:server:app:compileKotlinJvm)"
+    tasks = [":server:app:compileKotlinJvm"]
+    gradle-args = ["--no-configuration-cache"]
+}
+
+up-to-date-build {
+    title = "Up-to-date build"
+    tasks = ["build"]
+}
+
+non-abi-change {
+    title = "Non-ABI change in common/core then build"
+    tasks = ["build"]
+    apply-non-abi-change-to = "common/core/src/commonMain/kotlin/structure/common/core/CommonGreeting.kt"
+    warm-ups = 2
+    iterations = 5
+}
+
+abi-change {
+    title = "ABI change in common/core then build"
+    tasks = ["build"]
+    apply-abi-change-to = "common/core/src/commonMain/kotlin/structure/common/core/CommonGreeting.kt"
+    warm-ups = 2
+    iterations = 5
+}
+
+clean-build {
+    title = "Full rebuild (build --rerun-tasks)"
+    tasks = ["build"]
+    gradle-args = ["--rerun-tasks"]
+    warm-ups = 1
+    iterations = 3
+}
+
+ide-sync {
+    title = "IDE sync proxy (KGP prepareKotlinIdeaImport + resolveIdeDependencies on every module)"
+    tasks = [
+        ":common:client:prepareKotlinIdeaImport", ":common:client:resolveIdeDependencies",
+        ":common:core:prepareKotlinIdeaImport", ":common:core:resolveIdeDependencies",
+        ":common:webapi:prepareKotlinIdeaImport", ":common:webapi:resolveIdeDependencies",
+        ":web:app:prepareKotlinIdeaImport", ":web:app:resolveIdeDependencies",
+        ":web:components:prepareKotlinIdeaImport", ":web:components:resolveIdeDependencies",
+        ":web:test-common:prepareKotlinIdeaImport", ":web:test-common:resolveIdeDependencies",
+        ":server:app:prepareKotlinIdeaImport", ":server:app:resolveIdeDependencies",
+        ":server:core:prepareKotlinIdeaImport", ":server:core:resolveIdeDependencies",
+        ":server:database:prepareKotlinIdeaImport", ":server:database:resolveIdeDependencies",
+        ":mobile:android-app:prepareKotlinIdeaImport", ":mobile:android-app:resolveIdeDependencies",
+        ":mobile:compose-app:prepareKotlinIdeaImport", ":mobile:compose-app:resolveIdeDependencies",
+        ":mobile:ios-umbrella:prepareKotlinIdeaImport", ":mobile:ios-umbrella:resolveIdeDependencies",
+        ":mobile:shared:prepareKotlinIdeaImport", ":mobile:shared:resolveIdeDependencies",
+    ]
+    gradle-args = ["--no-configuration-cache"]
+}
