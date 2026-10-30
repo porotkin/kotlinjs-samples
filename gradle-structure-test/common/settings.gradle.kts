@@ -22,7 +22,9 @@ dependencyResolutionManagement {
     }
 }
 
-includeBuild("../build-logic")
+includeBuild("../build-logic") {
+    name = "gradle-structure-test-build-logic"
+}
 
 include("client")
 include("core")

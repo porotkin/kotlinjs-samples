@@ -32,6 +32,9 @@ dependencyResolutionManagement {
 }
 
 includeBuild("build-logic")
+includeBuild("gradle-structure-test/common")
+includeBuild("gradle-structure-test")
+includeBuild("kmp-mvvm")
 
 include("jvm-incremental-compilation")
 include("jvm-incremental-compilation:common")

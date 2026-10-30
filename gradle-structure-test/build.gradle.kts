@@ -11,5 +11,6 @@ tasks.named("build") {
         gradle.includedBuild("common").task(":build"),
         gradle.includedBuild("web").task(":build"),
         gradle.includedBuild("server").task(":build"),
+        gradle.includedBuild("mobile").task(":build"),
     )
 }
