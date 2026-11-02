@@ -1,0 +1,38 @@
+package sample.reactcompiler
+
+import js.array.component1
+import js.array.component2
+import react.FC
+import react.Props
+import react.dom.html.ReactHTML.button
+import react.dom.html.ReactHTML.div
+import react.dom.html.ReactHTML.span
+import react.useState
+import react.useTransition
+
+/**
+ * Case 09: `useState` & `useTransition` Destructuring via Indexed Access (`_destruct[0]`, `_destruct.at(0)`)
+ *
+ * - **Cause:** In Kotlin/JS, `val (count, setCount) = useState(0)` lowers to `_destruct[0]` and `_destruct[1]`,
+ *   and `val (isPending, startTransition) = useTransition()` lowers to `_destruct.at(0)` and `_destruct.at(1)`.
+ * - **React Compiler Behavior:** `InferTypes` only assigns the `SetState` and `StartTransition` built-in
+ *   types when destructured via a JS `ArrayPattern` (`const [count, setCount] = useState(0)`). With
+ *   `_destruct[1]` or `_destruct.at(1)`, `setCount` and `startTransition` lose their `SetState` /
+ *   `StartTransition` built-in type guarantees.
+ */
+val DestructuredStateDemo: FC<Props> = FC {
+    val (count, setCount) = useState(0)
+    val (isPending, startTransition) = useTransition()
+
+    div {
+        span { +"Count: $count (pending: $isPending)" }
+        button {
+            onClick = {
+                startTransition {
+                    setCount { it + 1 }
+                }
+            }
+            +"Increment in Transition"
+        }
+    }
+}
