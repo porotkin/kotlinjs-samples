@@ -66,3 +66,21 @@ dependencies {
 
     jsTestImplementation(libs.kotlin.testJs)
 }
+
+val verifyReactCompiler = tasks.register<Exec>("verifyReactCompiler") {
+    group = "verification"
+    description = "Verifies the Case01..Case11 .mjs outputs and the Vite bundle compile cleanly through babel-plugin-react-compiler"
+
+    dependsOn("compileDevelopmentExecutableKotlinJs", "jsBrowserProductionVite", ":kotlinNpmInstall")
+
+    workingDir = layout.projectDirectory.asFile
+    commandLine("node", "vite/verify-react-compiler.mjs")
+}
+
+tasks.named("jsProductionExecutableCompileSync") {
+    mustRunAfter("jsDevelopmentExecutableCompileSync")
+}
+
+tasks.named("check") {
+    dependsOn(verifyReactCompiler)
+}
