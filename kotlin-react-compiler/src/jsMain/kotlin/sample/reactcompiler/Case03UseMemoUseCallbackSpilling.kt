@@ -18,11 +18,9 @@ import react.useMemo
  *   var filtered = useMemo(callback, tmp0);
  *   ```
  *   When forwarding `vararg elements` (as in [useMemoizedList]), `dependencies` lowers to `var tmp0 = elements.slice()`.
- * - **React Compiler Behavior:** Fails in `BuildHIR` / `DropManualMemoization` with two hard errors:
- *   - `Error: Expected the dependency list for useMemo to be an array literal.`
- *   - `Error: Expected the first argument to be an inline function expression.`
- * - **Fix:** Make `useMemo` / `useCallback` inline pass-throughs (`callback()` / `callback`) when React Compiler
- *   is used, or inline `callback` and `tmp0` in the Vite pre-transform plugin.
+ * - **Mitigation:** The IR plugin rewrites `useMemo` / `useCallback` into `useMemoRaw(callback, [deps])` /
+ *   `useCallbackRaw(callback, [deps])`. A spread dependency list ([useMemoizedList]) can't become an array
+ *   literal, so it keeps the [useMemoInline] pass-through.
  */
 fun useSearchResults(
     items: ReadonlyArray<String>,
@@ -45,7 +43,8 @@ fun useSearchResults(
 
 fun <T> useMemoizedList(
     vararg elements: T,
-): List<T> =
-    useMemo(*elements) {
+): List<T> {
+    return useMemoInline(*elements) {
         elements.asList()
     }
+}
