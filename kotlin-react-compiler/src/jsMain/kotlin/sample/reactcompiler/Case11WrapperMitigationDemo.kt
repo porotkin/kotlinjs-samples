@@ -75,6 +75,16 @@ inline fun <T : Function<*>> useCallbackInline(
     return callback
 }
 
+inline fun useEffectInline(
+    vararg dependencies: Any?,
+    noinline effect: () -> Unit,
+) {
+    useEffectRawInline(
+        effect = effect,
+        dependencies = dependencies,
+    )
+}
+
 external interface CompilerFriendlyCounterProps : Props {
     var title: String
     var step: Int
