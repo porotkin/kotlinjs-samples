@@ -1,7 +1,11 @@
+@file:OptIn(InternalApi::class)
+
 package sample.reactcompiler
 
 import js.internal.InternalApi
+import js.objects.Object
 import js.objects.unsafeJso
+import js.reflect.Reflect
 import js.reflect.unsafeCast
 import react.*
 import react.dom.html.ReactHTML.button
@@ -12,8 +16,16 @@ import react.jsx.runtime.jsx
 @PublishedApi
 internal fun buildRootChildren(
     builder: FragmentProps,
-): ReactNode? =
-    builder.children
+): ReactNode? {
+    val direct = builder.children
+    if (direct != null) return direct
+    val symbols = Object.getOwnPropertySymbols(builder)
+    return if (symbols.isNotEmpty()) {
+        unsafeCast<ReactNode>(Reflect.get(builder, symbols[0]))
+    } else {
+        null
+    }
+}
 
 /**
  * Case 11: Kotlin Wrappers Mitigation Demo
