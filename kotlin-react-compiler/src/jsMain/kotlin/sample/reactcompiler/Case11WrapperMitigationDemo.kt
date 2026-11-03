@@ -30,8 +30,8 @@ internal fun buildRootChildren(
 /**
  * Case 11: Kotlin Wrappers Mitigation Demo
  *
- * Demonstrates how changing `FC` (and `useMemo` / `useCallback`) in `kotlin-react` wrappers
- * mitigates Cases 02, 03, 04, and 07 without a custom Kotlin IR compiler plugin:
+ * Demonstrates how changing `FC` (and `useMemo` / `useCallback` / `useEffect` / `useTransition`) in
+ * `kotlin-react` wrappers, combined with the local IR & Vite pre-transform pipeline, mitigates Cases 01–10:
  *
  * 1. Emits `"use memo"` at the top of the component function so React Compiler discovers both
  *    stateful and stateless components in `annotation` or `infer` mode (Case 07).
@@ -40,6 +40,7 @@ internal fun buildRootChildren(
  *    all hook calls at the top level of the component function (Case 02).
  * 3. Makes `useMemoInline` / `useCallbackInline` direct inline pass-throughs, avoiding reversed-parameter
  *    spilled temporaries (Case 03) and Seskar `ValueTransformer` dependency array rewrites (Case 04).
+ * 4. Provides `useEffectInline` and `useTransitionInline` bindings directly to `'react'` (Cases 09, 10).
  */
 @OptIn(InternalApi::class)
 inline fun <P : Props> compilerFriendlyFC(

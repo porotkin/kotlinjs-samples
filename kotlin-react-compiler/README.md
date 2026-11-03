@@ -22,6 +22,31 @@ kotlin-react-compiler/build/compileSync/js/main/developmentExecutable/kotlin/kot
 
 ---
 
+## Implemented Mitigations in `kotlin-react-compiler`
+
+All 10 compatibility issues (`Case01`–`Case10`) are mitigated end-to-end inside `kotlin-react-compiler` across three layers:
+
+1. **Kotlin-Level Wrappers & Idioms (`src/jsMain/kotlin/sample/reactcompiler/`)**
+   - `compilerFriendlyFC` (`Case11`) shows the wrapper-level fix: inline root `ChildrenBuilder` creation and emit `"use memo"`. With the IR plugin, plain `FC { ... }` gets the same treatment, so `Case02`, `Case06`, `Case09`, and `Case10` keep idiomatic `FC`.
+   - `useMemoInline` / `useCallbackInline` pass-throughs remain only in `Case11` and in `Case03`'s `useMemoizedList`, whose spread dependency list can't become an array literal. `Case04` unboxes `value class` (`UserId`) and `Duration` values, because a value class in a `vararg Any?` dependency list is boxed into a fresh object every render.
+   - `Case05CustomHookHoistedLambdas.kt` extracts `createPolledItemsEffect` and `incrementTickCount` outside `usePolledItems` so Kotlin/JS does not emit `use[A-Z0-9]*` helper names.
+   - `ReactHooksRaw.kt` (`@file:JsModule("react")`) binds `useTransitionInline` and `useEffectRawInline` directly to `'react'` (`Case09`, `Case10`), `ReactJsxRuntimeRaw.kt` binds `jsxRaw` / `jsxsRaw` to `'react/jsx-runtime'` for the IR plugin, and `BadgeTone` uses Seskar `@JsValue` string union constants (`Case10`).
+
+2. **Local Kotlin IR Compiler Plugin (`compiler-plugin/src/main/kotlin/sample/reactcompiler/ir/ReactCompilerIrPlugin.kt`)**
+   - Built automatically by `compileReactCompilerIrPlugin` / `reactCompilerIrPluginJar` in `build.gradle.kts` and attached to `kotlinCompilerPluginClasspathJsMain`.
+   - Rewrites each `FC { ... }` (and the local `compilerFriendlyFC` / `inlineFragmentFC` / `inlineStatelessFCWithoutDirective`) component into a plain `(props)` function: `"use memo"` first, hooks in source order, early `return@FC` as `return null`, and the `@ElementBuilder` tree lowered to `jsx` / `jsxs` calls from `'react/jsx-runtime'` with `children` set directly and each props object created right before its call (`Case02`, `Case06`, `Case07`, `Case08`). Components it can't express (loops, `key =`, `Provider`, an escaping builder receiver) are left to `kotlin-react` unchanged.
+   - Rewrites `useMemo` / `useCallback` (and the non-suspend `useEffectInline`) into `useMemoRaw(callback, [deps])` / `useCallbackRaw(callback, [deps])` / `useEffect(effect, [deps])` without spilled temporaries (`Case03`, `Case04`, `Case10`).
+   - Adds `"use memo"` to every non-inline `use*` hook and marks lowered component vals `@EagerInitialization`, so no `_init_properties_*()` call precedes the directive and same-file reads skip `get_Foo()` (`Case07`, `Case10`).
+   - React Compiler gives each element its own memo scope only when `environment.moduleTypeProvider` types `jsx` / `jsxs` from `'react/jsx-runtime'` (`read`, `freeze`, `read` params, `frozen` result).
+
+3. **Vite 8 + Rolldown + Oxc Pre-Transform (`vite/react-compiler-pre-plugin.mjs`, `vite/vite.config.mjs`)**
+   - Fixes only the JS syntax the Kotlin/JS backend emits after the IR plugin has run, using **Oxc** (`parseSync` and `Visitor` from `rolldown/utils`) and hooks resolved through their `'react'` imports: rewrites `var` declarations to `let` (`Case01`, until Kotlin 2.5), indexed `useState` / `useTransition` access (`_destruct[0]`, `_destruct.at(0)`) to `let [state, setState] = ...` (`Case09`), prefixes synthetic `use*$lambda` / `Component$lambda$` helpers with `_` (`Case05`, `Case06`), puts non-capturing callbacks that Kotlin/JS lifted to top-level functions back inline as arrow functions for `useMemo` / `useCallback` / `useEffect` (`Case03`), and drops the trailing `return Unit_getInstance()` from `useEffect` callbacks (`Case10`).
+   - Runs `babel-plugin-react-compiler` with an `environment.moduleTypeProvider` that types `jsx` / `jsxs` from `'react/jsx-runtime'`, so each element emitted by the IR plugin gets its own memo scope (`Case07`, `Case08`).
+   - Uses **Rolldown** native Rust hook filtering (`withFilter` from `rolldown/filter` and `transform.filter` on `id` and `code`) so non-matching modules and `node_modules` are filtered out in Rust without crossing the JS NAPI bridge.
+   - Verified automatically via `./gradlew :kotlin-react-compiler:verifyReactCompiler` (wired into `:kotlin-react-compiler:check`): every case compiles without React Compiler errors in `annotation` and `infer` mode, and the `jsBrowserProductionVite` bundle contains React Compiler output.
+
+---
+
 ## Summary Matrix: Where Each Discrepancy Is Solved
 
 | Case                                                                                                  | Source File                                                                                                                         | Category                                                 | Solved By                                                                                                 |
