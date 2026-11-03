@@ -61,5 +61,8 @@ dependencies {
     jsMainImplementation(kotlinWrappers.react)
     jsMainImplementation(kotlinWrappers.reactDom)
 
+    jsMainImplementation(devNpm("@babel/core", "^7.26.0"))
+    jsMainImplementation(devNpm("babel-plugin-react-compiler", "^1.0.0"))
+
     jsTestImplementation(libs.kotlin.testJs)
 }
