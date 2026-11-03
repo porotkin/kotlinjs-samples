@@ -136,13 +136,13 @@ private class ReactSymbols(
             .ifEmpty { error("React Compiler IR plugin: no component factory $id") }
     }
 
-    val hooks: Map<IrSimpleFunctionSymbol, IrSimpleFunctionSymbol> = mapOf(
-        function(REACT, "useMemo") to function(FqName("react.raw"), "useMemoRaw"),
-        function(REACT, "useCallback") to function(FqName("react.raw"), "useCallbackRaw") {
+    val hooks: Map<IrSimpleFunctionSymbol, IrSimpleFunctionSymbol> = listOf(
+        functions(REACT, "useMemo") to function(FqName("react.raw"), "useMemoRaw"),
+        functions(REACT, "useCallback") to function(FqName("react.raw"), "useCallbackRaw") {
             it.owner.typeParameters.single().superTypes.any { type -> type.classFqName == FqName("kotlin.Function") }
         },
-        function(SAMPLE, "useEffectInline") to function(SAMPLE, "useEffectRawInline"),
-    )
+        functions(SAMPLE, "useEffectInline") to function(SAMPLE, "useEffectRawInline"),
+    ).flatMap { (sources, target) -> sources.map { it to target } }.toMap()
 
     private fun callable(
         packageName: FqName,
@@ -161,8 +161,15 @@ private class ReactSymbols(
         name: String,
         filter: (IrSimpleFunctionSymbol) -> Boolean = { true },
     ): IrSimpleFunctionSymbol =
-        finder.findFunctions(callable(packageName, name)).singleOrNull(filter)
-            ?: error("React Compiler IR plugin: missing $packageName.$name")
+        functions(packageName, name, filter).first()
+
+    private fun functions(
+        packageName: FqName,
+        name: String,
+        filter: (IrSimpleFunctionSymbol) -> Boolean = { true },
+    ): List<IrSimpleFunctionSymbol> =
+        finder.findFunctions(callable(packageName, name)).filter(filter)
+            .ifEmpty { error("React Compiler IR plugin: missing $packageName.$name") }
 }
 
 private sealed interface Item
