@@ -4,7 +4,6 @@ import react.FC
 import react.Props
 import react.dom.html.ReactHTML.div
 import react.dom.html.ReactHTML.span
-import react.useEffect
 import seskar.js.JsValue
 
 sealed external interface BadgeTone {
@@ -48,9 +47,10 @@ external interface EffectAndGettersDemoProps : Props {
  * - **Mitigation:**
  *   1. Use Seskar `@JsValue` unions for [BadgeTone] so `BadgeTone.ACCENT` lowers to the string literal `'ACCENT'`;
  *      the IR plugin marks component vals `@EagerInitialization`, so same-file reads skip `get_ChildBadge()`.
+ *   2. The IR plugin rewrites [useEffectInline] into React's `useEffect(effect, [deps])`.
  */
 val EffectAndGettersDemo: FC<EffectAndGettersDemoProps> = FC { props ->
-    useEffect(props.label) {
+    useEffectInline(props.label) {
         console.log("Rendered label:", props.label)
     }
 
