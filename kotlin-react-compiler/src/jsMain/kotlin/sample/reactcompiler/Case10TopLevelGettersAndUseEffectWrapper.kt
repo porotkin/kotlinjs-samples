@@ -5,10 +5,16 @@ import react.Props
 import react.dom.html.ReactHTML.div
 import react.dom.html.ReactHTML.span
 import react.useEffect
+import seskar.js.JsValue
 
-enum class BadgeTone {
-    NEUTRAL,
-    ACCENT,
+sealed external interface BadgeTone {
+    companion object {
+        @JsValue("NEUTRAL")
+        val NEUTRAL: BadgeTone
+
+        @JsValue("ACCENT")
+        val ACCENT: BadgeTone
+    }
 }
 
 object DefaultConfig {
@@ -22,7 +28,7 @@ external interface ChildBadgeProps : Props {
 
 val ChildBadge: FC<ChildBadgeProps> = FC { props ->
     span {
-        +"[${props.tone.name}] ${DefaultConfig.PREFIX}: ${props.text}"
+        +"[${props.tone}] ${DefaultConfig.PREFIX}: ${props.text}"
     }
 }
 
@@ -39,11 +45,9 @@ external interface EffectAndGettersDemoProps : Props {
  *      module-level constant identifiers.
  *   2. `kotlin-react`'s `useEffect(dependencies, effect)` (`kotlin-react/react/useEffect.mjs`) reverses the
  *      argument order relative to React's `useEffect(effect, dependencies)` and wraps the coroutine `slambda`.
- * - **React Compiler Behavior:**
- *   1. React Compiler treats each 0-arg getter call (`get_ChildBadge()`, `BadgeTone_ACCENT_getInstance()`)
- *      as a potentially allocating function call and reserves a `Symbol.for("react.memo_cache_sentinel")`
- *      slot in `_c(N)` for every getter call.
- *   2. React Compiler memoizes `[props.label]` and the `slambda` passed to `kotlin-react`'s `useEffect` wrapper.
+ * - **Mitigation:**
+ *   1. Use Seskar `@JsValue` unions for [BadgeTone] so `BadgeTone.ACCENT` lowers to the string literal `'ACCENT'`;
+ *      the IR plugin marks component vals `@EagerInitialization`, so same-file reads skip `get_ChildBadge()`.
  */
 val EffectAndGettersDemo: FC<EffectAndGettersDemoProps> = FC { props ->
     useEffect(props.label) {
