@@ -18,14 +18,8 @@ external interface CounterCardProps : Props {
  *   **not `inline`**. The actual component function `(props) => createElementOrNull(...)` lives inside
  *   `kotlin-react/react/FC.mjs`, while the user module emits `function CounterCard$lambda($this$FC, props)`
  *   passed to `memo(FC(CounterCard$lambda))`.
- * - **React Compiler Behavior:**
- *   1. `CounterCard$lambda($this$FC, props)` takes two parameters `($this$FC, props)`, mutates its first
- *      parameter `$this$FC` (`setDefaultKey($this$FC, ...)`, `addChild($this$FC, ...)`), and returns `Unit`.
- *   2. When React Compiler compiles `CounterCard$lambda`, it treats the first parameter `$this$FC` as frozen
- *      component `props` and fails validation with:
- *      `Error: This value cannot be modified. Modifying component props or hook arguments is not allowed.`
- *   3. Even if parameter mutation were ignored, `PruneNonEscapingScopes` prunes all reactive scopes because
- *      `$this$FC` is a parameter rather than the return value (`return Unit_getInstance()`).
+ * - **Mitigation:** The IR plugin rewrites `FC { ... }` into a `(props)` function that emits `"use memo"`,
+ *   calls hooks at the top level, and returns `jsx(...)` elements directly.
  */
 val CounterCard: FC<CounterCardProps> = FC { props ->
     val (count, setCount) = useState(0)
