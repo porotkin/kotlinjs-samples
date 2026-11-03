@@ -25,6 +25,21 @@ const STATE_HOOKS = new Set(['useState', 'useTransition']);
 const CALLBACK_HOOKS = new Set(['useMemo', 'useCallback', 'useEffect']);
 const SYNTHETIC_HELPER = /^(?:use[A-Z0-9]\w*|[A-Z]\w*\$lambda)\$/;
 
+const jsxFunction = {
+  kind: 'function',
+  positionalParams: ['read', 'freeze', 'read'],
+  restParam: null,
+  calleeEffect: 'read',
+  returnType: { kind: 'type', name: 'Any' },
+  returnValueKind: 'frozen',
+};
+
+export function moduleTypeProvider(moduleName) {
+  return moduleName === 'react/jsx-runtime'
+    ? { kind: 'object', properties: { jsx: jsxFunction, jsxs: jsxFunction } }
+    : null;
+}
+
 export function normalizeKotlinMjs(code, filename = 'module.mjs') {
   const { program } = parseSync(filename, code, { lang: 'js' });
   const imports = new Map();
@@ -191,6 +206,7 @@ export function compileKotlinMjs(code, filename = 'module.mjs', { compilationMod
         {
           compilationMode,
           panicThreshold: 'none',
+          environment: { moduleTypeProvider },
           logger: { logEvent: (_filename, event) => events.push(event) },
         },
       ],
