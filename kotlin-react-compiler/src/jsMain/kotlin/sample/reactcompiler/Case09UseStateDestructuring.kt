@@ -8,21 +8,20 @@ import react.dom.html.ReactHTML.button
 import react.dom.html.ReactHTML.div
 import react.dom.html.ReactHTML.span
 import react.useState
-import react.useTransition
 
 /**
  * Case 09: `useState` & `useTransition` Destructuring via Indexed Access (`_destruct[0]`, `_destruct.at(0)`)
  *
  * - **Cause:** In Kotlin/JS, `val (count, setCount) = useState(0)` lowers to `_destruct[0]` and `_destruct[1]`,
  *   and `val (isPending, startTransition) = useTransition()` lowers to `_destruct.at(0)` and `_destruct.at(1)`.
- * - **React Compiler Behavior:** `InferTypes` only assigns the `SetState` and `StartTransition` built-in
- *   types when destructured via a JS `ArrayPattern` (`const [count, setCount] = useState(0)`). With
- *   `_destruct[1]` or `_destruct.at(1)`, `setCount` and `startTransition` lose their `SetState` /
- *   `StartTransition` built-in type guarantees.
+ * - **Mitigation:** Bind [useTransitionInline] directly to `'react'` and rewrite
+ *   `_destruct[0]` / `_destruct[1]` and `_destruct.at(0)` / `_destruct.at(1)` into JS `ArrayPattern`
+ *   destructuring (`const [state, setState] = ...`) in the Vite pre-transform plugin so `InferTypes`
+ *   assigns the `SetState` and `StartTransition` built-in types.
  */
 val DestructuredStateDemo: FC<Props> = FC {
     val (count, setCount) = useState(0)
-    val (isPending, startTransition) = useTransition()
+    val (isPending, startTransition) = useTransitionInline()
 
     div {
         span { +"Count: $count (pending: $isPending)" }
